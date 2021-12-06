@@ -24,10 +24,8 @@ jobs:
           key: ${{secrets.SSH_KEY}} #Must be unique in Heroku
           username: ${{secrets.USERNAME}}
           script: |
-              mkdir django
-              cd django
-              git clone https://github.com/VictorKudrin/Django.git
-              cd mydjango
+              cd /home/project/newdjango
+              git pull
       - name: Deployed successfully
         run: |
           echo Deployed!!
