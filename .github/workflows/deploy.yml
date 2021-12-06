@@ -1,28 +1,25 @@
-name: DjangoCI
-
-# Controls when the workflow will run
+name: Deploy
 on:
-  # Triggers the workflow on push request events but only for the main branch
   push:
     branches: [ main ]
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  pull_request:
+    branches: [ main ]
 jobs:
-  deploy:
-    name: Deploy to Droplet
-    # The type of runner that the job will run on
+  build:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps: 
-      - uses: actions/checkout@v2
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deployment
+        timeout-minutes: 60
+        uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.SSH_HOST}}
-          key: ${{secrets.SSH_KEY}} #Must be unique in Heroku
+          key: ${{secrets.SSH_KEY}}
           username: ${{secrets.USERNAME}}
           script: |
-              cd /home/project/newdjango
-              git pull
-      - name: Deployed successfully
-        run: |
-          echo Deployed!!
+            cd /home/project/newdjango
+            git pull
