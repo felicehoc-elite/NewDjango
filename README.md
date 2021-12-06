@@ -1,0 +1,2 @@
+# newdjango
+remake django
